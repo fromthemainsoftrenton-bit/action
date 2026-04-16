@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Water, Your Representatives — TWW Contact Directory</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      background: #111;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      padding: 1.5rem 1rem 3rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .dir-title { font-size: 22px; font-weight: 500; color: #f0f0f0; margin-bottom: 0.6rem; }
+    .dir-intro { font-size: 14px; color: #888; line-height: 1.65; margin-bottom: 1.5rem; max-width: 640px; }
+
+    /* Banner */
+    .tww-banner {
+      background: #1a1a1a;
+      border: 0.5px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .tww-col { min-width: 185px; }
+    .tww-banner-title { font-size: 13px; font-weight: 500; color: #e8e8e8; margin: 0 0 7px; }
+    .tww-banner-item { font-size: 12px; color: #888; margin: 0 0 4px; }
+    .tww-banner-item a { color: #7ab3d4; text-decoration: none; }
+    .tww-banner-item a:hover { text-decoration: underline; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .pill-red   { background: #2a1010; color: #c47a7a; border: 0.5px solid #5a2020; }
+    .pill-amber { background: #2a1e08; color: #c99a55; border: 0.5px solid #5a3e10; }
+
+    /* Search */
+    .search-row { margin-bottom: 1rem; }
+    .search-row input {
+      width: 100%;
+      font-size: 14px;
+      padding: 8px 12px;
+      background: #1e1e1e;
+      border: 0.5px solid #333;
+      border-radius: 8px;
+      color: #e8e8e8;
+      outline: none;
+    }
+    .search-row input::placeholder { color: #666; }
+    .search-row input:focus { border-color: #555; }
+
+    /* Filters */
+    .filter-groups { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .filter-group { display: flex; flex-direction: column; gap: 4px; }
+    .filter-group-label { font-size: 11px; color: #666; padding-left: 2px; letter-spacing: 0.04em; }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filter-btn {
+      font-size: 12px;
+      padding: 4px 13px;
+      border-radius: 20px;
+      border: 0.5px solid #333;
+      background: #1a1a1a;
+      color: #999;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .filter-btn:hover { background: #222; color: #ccc; }
+    .filter-btn.active { background: #2a2a2a; color: #e8e8e8; border-color: #555; font-weight: 500; }
+
+    /* Results */
+    .result-count { font-size: 12px; color: #555; margin-bottom: 1rem; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #555;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin: 1.25rem 0 0.6rem;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    /* Cards */
+    .card {
+      background: #1a1a1a;
+      border: 0.5px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: border-color 0.15s;
+    }
+    .card:hover { border-color: #3a3a3a; }
+    .card-name { font-size: 14px; font-weight: 500; color: #f0f0f0; margin: 0 0 2px; }
+    .card-title { font-size: 12px; color: #888; margin: 0 0 6px; }
+    .card-note { font-size: 11px; color: #666; font-style: italic; margin: 0 0 8px; }
+    .card-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #777; margin-top: 5px; }
+    .card-row a {
+      color: #7ab3d4;
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+    .card-row a:hover { color: #9dcae8; text-decoration: underline; }
+
+    /* Tags */
+    .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-bottom: 8px; }
+    .tag-trenton  { background: #0c2a3d; color: #7ab3d4; }
+    .tag-ewing    { background: #0d2a1a; color: #6db88a; }
+    .tag-hamilton { background: #2e1f08; color: #c99a55; }
+    .tag-lawrence { background: #1e1030; color: #a98fd4; }
+    .tag-hopewell { background: #2d1210; color: #c47a72; }
+    .tag-county   { background: #222;    color: #999;    }
+    .tag-state    { background: #2a1020; color: #c47aa0; }
+    .tag-federal  { background: #0d1f30; color: #5a9fd4; }
+    .tag-nj       { background: #2a1010; color: #c47a7a; }
+    .tag-tww      { background: #0a2218; color: #5daa88; }
+    .tag-gov      { background: #1a1030; color: #9a80d0; }
+
+    /* Highlight */
+    .highlight { background: #3a2e10; border-radius: 2px; color: #e8c97a; }
+
+    /* Empty state */
+    .empty { color: #555; font-size: 14px; padding: 2rem 0; text-align: center; }
+
+    /* Footer */
+    .dir-footer {
+      margin-top: 2.5rem;
+      padding-top: 1rem;
+      border-top: 0.5px solid #222;
+      font-size: 11px;
+      color: #444;
+    }
+    .dir-footer a { color: #555; text-decoration: none; }
+    .dir-footer a:hover { color: #888; text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      body { padding: 1rem 0.75rem 2rem; }
+      .dir-title { font-size: 18px; }
+      .tww-col { min-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="dir-title">Your Water, Your Representatives</h1>
+  <p class="dir-intro">Clean, reliable water is everyone's responsibility — and everyone's right. This directory puts the key decision-makers, elected officials, and regulators in one place so you can reach out, follow up, and hold them accountable.</p>
+
+  <div class="tww-banner">
+    <div class="tww-col">
+      <p class="tww-banner-title">Trenton Water Works</p>
+      <p class="tww-banner-item">&#127760; <a href="https://www.trentonnj.org/water" target="_blank">trentonnj.org/water</a></p>
+      <p class="tww-banner-item">&#128240; <a href="https://www.trentonnj.org/m/newsflash?cat=6" target="_blank">Press releases</a></p>
+    </div>
+    <div class="tww-col">
+      <p class="tww-banner-title">Water quality concern?</p>
+      <p class="tww-banner-item"><span class="pill pill-red">&#9742; 609-989-3055</span></p>
+      <p class="tww-banner-item" style="margin-top:5px;font-size:11px;color:#555;">Customer service line</p>
+    </div>
+    <div class="tww-col">
+      <p class="tww-banner-title">Water emergencies</p>
+      <p class="tww-banner-item"><span class="pill pill-amber">&#9742; 609-989-3222</span></p>
+      <p class="tww-banner-item" style="margin-top:5px;font-size:11px;color:#555;">24/7 — main breaks, hydrants, service leaks</p>
+    </div>
+  </div>
+
+  <div class="search-row">
+    <input type="text" id="search-input" placeholder="Search by name, title, or municipality…" aria-label="Search contacts" />
+  </div>
+
+  <div class="filter-groups">
+    <div class="filter-group">
+      <span class="filter-group-label">Municipality</span>
+      <div class="filter-row" id="muni-filters">
+        <button class="filter-btn active" data-filter="muni" data-val="all">All</button>
+        <button class="filter-btn" data-filter="muni" data-val="Trenton">Trenton</button>
+        <button class="filter-btn" data-filter="muni" data-val="Ewing">Ewing</button>
+        <button class="filter-btn" data-filter="muni" data-val="Hamilton">Hamilton</button>
+        <button class="filter-btn" data-filter="muni" data-val="Lawrence">Lawrence</button>
+        <button class="filter-btn" data-filter="muni" data-val="Hopewell">Hopewell</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-group-label">Level</span>
+      <div class="filter-row" id="level-filters">
+        <button class="filter-btn active" data-filter="level" data-val="all">All</button>
+        <button class="filter-btn" data-filter="level" data-val="TWW">TWW</button>
+        <button class="filter-btn" data-filter="level" data-val="Municipal">Municipal</button>
+        <button class="filter-btn" data-filter="level" data-val="County">County</button>
+        <button class="filter-btn" data-filter="level" data-val="State">State Reps</button>
+        <button class="filter-btn" data-filter="level" data-val="NJ DEP">NJ DEP</button>
+        <button class="filter-btn" data-filter="level" data-val="Governor">Governor</button>
+        <button class="filter-btn" data-filter="level" data-val="Federal">Federal Reps</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="result-count" id="result-count" aria-live="polite"></div>
+  <div id="cards-container"></div>
+
+  <div class="dir-footer">
+    <p>From the Mains of Trenton &mdash; <a href="https://trentonwaterworks.substack.com" target="_blank">trentonwaterworks.substack.com</a> &mdash; Last updated April 2026</p>
+  </div>
+
+  <script>
+    const ALL_MUNIS = ["Trenton","Ewing","Hamilton","Lawrence","Hopewell"];
+
+    const officials = [
+      { name:"Sean Semple", title:"Director, Dept. of Water & Sewer", muni:"TWW", level:"TWW", phone:"609-989-3055", email:"ssemple@trentonnj.org", web:"https://www.trentonnj.org/water", note:null, districts:null },
+      { name:"Michael Walker", title:"Chief of Communications and Community Relations, TWW", muni:"TWW", level:"TWW", phone:"609-789-7272", email:"mwalker@trentonnj.org", web:"https://www.trentonnj.org/water", note:null, districts:null },
+      { name:"Reed Gusciora", title:"Mayor, City of Trenton", muni:"Trenton", level:"Municipal", phone:"609-989-3030", email:"mayor@trentonnj.org", web:"https://www.trentonnj.org/mayor", note:null, districts:null },
+      { name:"Jenna L. Figueroa Kettenburg", title:"Council President, South Ward", muni:"Trenton", level:"Municipal", phone:"609-414-5953", email:"jFigueroaKettenburg@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Jennifer Williams", title:"Council Vice President, North Ward", muni:"Trenton", level:"Municipal", phone:"609-433-7784", email:"jenwilliams@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Joseph Harrison", title:"Council Member, East Ward", muni:"Trenton", level:"Municipal", phone:"609-422-6433", email:"jharrison@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Teska Frisby", title:"Council Member, West Ward", muni:"Trenton", level:"Municipal", phone:"609-422-6148", email:"tfrisby@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Jasi Mikae Edwards", title:"Council Member, At-Large", muni:"Trenton", level:"Municipal", phone:"609-508-2856", email:"jedwards@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Crystal Feliciano", title:"Council Member, At-Large", muni:"Trenton", level:"Municipal", phone:"609-475-2395", email:"cfeliciano@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Yazminelly Gonzalez", title:"Council Member, At-Large", muni:"Trenton", level:"Municipal", phone:"609-433-8393", email:"ygonzalez@trentonnj.org", web:"https://www.trentonnj.org/council", note:null, districts:null },
+      { name:"Bert Steinmann", title:"Mayor, Ewing Township", muni:"Ewing", level:"Municipal", phone:"609-883-2900", email:"mayor@ewingnj.org", web:"https://ewingnj.org", note:null, districts:null },
+      { name:"David Schroth", title:"Council President, Ewing", muni:"Ewing", level:"Municipal", phone:"609-883-2900", email:"dschroth@ewingnj.org", web:"https://ewingnj.org/our-council", note:null, districts:null },
+      { name:"Sarah Steward", title:"Council Vice President, Ewing", muni:"Ewing", level:"Municipal", phone:"609-883-2900", email:"ssteward@ewingnj.org", web:"https://ewingnj.org/our-council", note:null, districts:null },
+      { name:"Kevin Baxter", title:"Council Member, Ewing", muni:"Ewing", level:"Municipal", phone:"609-883-2900", email:"kbaxter@ewingnj.org", web:"https://ewingnj.org/our-council", note:null, districts:null },
+      { name:"Kathleen Wollert", title:"Council Member, Ewing", muni:"Ewing", level:"Municipal", phone:"609-883-2900", email:"kwollert@ewingnj.org", web:"https://ewingnj.org/our-council", note:null, districts:null },
+      { name:"Jennifer Keyes-Maloney", title:"Council Member, Ewing", muni:"Ewing", level:"Municipal", phone:"609-883-2900", email:"jkeyes-maloney@ewingnj.org", web:"https://ewingnj.org/our-council", note:null, districts:null },
+      { name:"Jeff Martin", title:"Mayor, Hamilton Township", muni:"Hamilton", level:"Municipal", phone:"609-890-0150", email:"mayor@hamiltonNJ.com", web:"https://www.hamiltonNJ.com", note:null, districts:null },
+      { name:"Pasquale \"Pat\" Papero", title:"Council President, Hamilton", muni:"Hamilton", level:"Municipal", phone:"609-890-0150", email:"PPapero@HamiltonNJ.com", web:"https://www.hamiltonNJ.com", note:null, districts:null },
+      { name:"Nancy Phillips", title:"Council Vice President, Hamilton", muni:"Hamilton", level:"Municipal", phone:"609-890-0150", email:"nphillips@hamiltonnj.com", web:"https://www.hamiltonNJ.com", note:null, districts:null },
+      { name:"Anthony Carabelli", title:"Council Member, Hamilton", muni:"Hamilton", level:"Municipal", phone:"609-890-0150", email:"acarabelli@hamiltonnj.com", web:"https://www.hamiltonNJ.com", note:null, districts:null },
+      { name:"Richard Tighe", title:"Council Member, Hamilton", muni:"Hamilton", level:"Municipal", phone:"609-890-0150", email:"rtighe@hamiltonnj.com", web:"https://www.hamiltonNJ.com", note:null, districts:null },
+      { name:"Charles F. Whalen", title:"Council Member, Hamilton", muni:"Hamilton", level:"Municipal", phone:"609-890-0150", email:"cwhalen@hamiltonnj.com", web:"https://www.hamiltonNJ.com", note:null, districts:null },
+      { name:"Christopher Bobbitt", title:"Mayor, Lawrence Township", muni:"Lawrence", level:"Municipal", phone:"609-844-7000", email:"cbobbitt@lawrencetwp.com", web:"https://www.lawrencetwp.com", note:null, districts:null },
+      { name:"Patricia Hendricks Farmer", title:"Council Member, Lawrence", muni:"Lawrence", level:"Municipal", phone:"609-844-7000", email:"pfarmer@lawrencetwp.com", web:"https://www.lawrencetwp.com", note:null, districts:null },
+      { name:"Bonne O'Flanagan Giglio", title:"Council Member, Lawrence", muni:"Lawrence", level:"Municipal", phone:"609-844-7000", email:"bgiglio@lawrencetwp.com", web:"https://www.lawrencetwp.com", note:null, districts:null },
+      { name:"James Kownacki", title:"Council Member, Lawrence", muni:"Lawrence", level:"Municipal", phone:"609-844-7000", email:"jkownacki@lawrencetwp.com", web:"https://www.lawrencetwp.com", note:null, districts:null },
+      { name:"Amanda Santos", title:"Council Member, Lawrence", muni:"Lawrence", level:"Municipal", phone:"609-844-7000", email:"asantos@lawrencetwp.com", web:"https://www.lawrencetwp.com", note:null, districts:null },
+      { name:"David Chait", title:"Mayor, Hopewell Township", muni:"Hopewell", level:"Municipal", phone:"908-930-9614", email:"dchait@hopewelltwp.org", web:"https://www.hopewelltwp.org", note:null, districts:null },
+      { name:"Uma Purandare", title:"Deputy Mayor, Hopewell Township", muni:"Hopewell", level:"Municipal", phone:"609-737-0605", email:"upurandare@hopewelltwp.org", web:"https://www.hopewelltwp.org", note:null, districts:null },
+      { name:"Michael Ruger", title:"Committee Member, Hopewell Township", muni:"Hopewell", level:"Municipal", phone:"609-737-0605", email:"mruger@hopewelltwp.org", web:"https://www.hopewelltwp.org", note:null, districts:null },
+      { name:"Kevin Kuchinski", title:"Committee Member, Hopewell Township", muni:"Hopewell", level:"Municipal", phone:"609-737-0605", email:null, web:"https://www.hopewelltwp.org/FormCenter/Contact-Us-9/Contact-Township-Committee-Member-Kevin--63", note:null, districts:null },
+      { name:"Courtney Peters-Manning", title:"Committee Member, Hopewell Township", muni:"Hopewell", level:"Municipal", phone:"609-737-0605", email:"cpeters-manning@hopewelltwp.org", web:"https://www.hopewelltwp.org", note:null, districts:null },
+      { name:"Daniel R. Benson", title:"County Executive, Mercer County", muni:"County-wide", level:"County", phone:"609-989-6518", email:"countyexec@mercercounty.org", web:"https://www.mercercounty.org/government/county-executive", note:null, districts:null },
+      { name:"Terrance Stokes", title:"Commissioner, Chair", muni:"County-wide", level:"County", phone:"609-989-6560", email:"tstokes@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"Cathleen M. Lewis", title:"Commissioner", muni:"County-wide", level:"County", phone:"609-989-6627", email:"clewis@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"John A. Cimino", title:"Commissioner", muni:"County-wide", level:"County", phone:"609-989-6961", email:"jcimino@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"Samuel T. Frisby", title:"Commissioner", muni:"County-wide", level:"County", phone:"609-989-6557", email:"sfrisby@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"Kristin L. McLaughlin", title:"Commissioner", muni:"County-wide", level:"County", phone:"609-989-6980", email:"kmclaughlin@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"Nina D. Melker", title:"Commissioner", muni:"County-wide", level:"County", phone:"609-989-6625", email:"nmelker@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"Lucylle R.S. Walter", title:"Commissioner", muni:"County-wide", level:"County", phone:"609-989-6659", email:"lwalter@mercercounty.org", web:"https://www.mercercounty.org/government/board-of-commissioners", note:null, districts:null },
+      { name:"Shirley Turner", title:"NJ State Senator, District 15", muni:"State", level:"State", phone:"609-695-3465", email:"SenTurner@njleg.org", web:"https://www.njleg.state.nj.us/members/bio.asp?leg=390", note:null, districts:["Trenton","Ewing","Lawrence","Hopewell","Hamilton"] },
+      { name:"Verlina Reynolds-Jackson", title:"Assemblywoman, District 15", muni:"State", level:"State", phone:"609-695-3465", email:"AsmReynoldsJackson@njleg.org", web:"https://www.njleg.state.nj.us/members/bio.asp?leg=424", note:null, districts:["Trenton","Ewing","Lawrence","Hopewell","Hamilton"] },
+      { name:"Anthony Verrelli", title:"Assemblyman, District 15", muni:"State", level:"State", phone:"609-695-3465", email:"AsmVerrelli@njleg.org", web:"https://www.njleg.state.nj.us/members/bio.asp?leg=437", note:null, districts:["Trenton","Ewing","Lawrence","Hopewell","Hamilton"] },
+      { name:"Linda R. Greenstein", title:"NJ State Senator, District 14 — Assistant Majority Leader", muni:"State", level:"State", phone:"609-395-9911", email:null, web:"https://nj-14-senate.web.fireside21.app/forms/writeyourrep/?to=Senator%20Linda%20R.%20Greenstein", note:"District 14 (Mercer & Middlesex) — Hamilton only", districts:["Hamilton"] },
+      { name:"Wayne P. DeAngelo", title:"Assemblyman, District 14 — Deputy Speaker / Deputy Whip", muni:"State", level:"State", phone:"609-631-7501", email:null, web:"https://nj-14-assembly-deangelo.web.fireside21.app/forms/writeyourrep/?to=Assemblyman%20Wayne%20P.%20DeAngelo", note:"District 14 (Mercer & Middlesex) — Hamilton only", districts:["Hamilton"] },
+      { name:"Tennille R. McCoy", title:"Assemblywoman, District 14 — Deputy Conference Leader", muni:"State", level:"State", phone:"609-631-0198", email:null, web:"https://nj-14-assembly-mccoy.web.fireside21.app/forms/writeyourrep/?to=Assemblywoman%20Tennille%20R.%20McCoy", note:"District 14 (Mercer & Middlesex) — Hamilton only", districts:["Hamilton"] },
+      { name:"Ed Potosnak", title:"Acting DEP Commissioner", muni:"NJ DEP", level:"NJ DEP", phone:"609-292-2885", email:"commissioner@dep.nj.gov", web:"https://www.nj.gov/dep/commissioner", note:null, districts:null },
+      { name:"Gov. Mikie Sherrill", title:"Governor of New Jersey", muni:"Governor", level:"Governor", phone:"609-292-6000", email:null, web:"https://www.nj.gov/governor/contact/", note:"Contact via web form", districts:null },
+      { name:"Elizabeth Noll", title:"Senior Strategist for Energy, Governor's Office", muni:"Governor", level:"Governor", phone:"609-292-6000", email:null, web:"https://www.nj.gov/governor/contact/", note:"Former U.S. Dept. of Energy official; contact via governor's office main line", districts:null },
+      { name:"Cory Booker", title:"U.S. Senator, New Jersey (D)", muni:"Federal", level:"Federal", phone:"202-224-3224", email:null, web:"https://www.booker.senate.gov/contact", note:"DC office: 202-224-3224 · NJ office (Newark): 973-639-8700", districts:ALL_MUNIS },
+      { name:"Andy Kim", title:"U.S. Senator, New Jersey (D)", muni:"Federal", level:"Federal", phone:"202-224-4744", email:null, web:"https://www.kim.senate.gov/contact/", note:"DC office: 202-224-4744", districts:ALL_MUNIS },
+      { name:"Bonnie Watson Coleman", title:"U.S. Representative, District 12 (D)", muni:"Federal", level:"Federal", phone:"202-225-5801", email:null, web:"https://watsoncoleman.house.gov/contact/", note:"District 12: Trenton, Ewing, Hopewell, part of Hamilton · Ewing district office: 609-883-0026 · Not seeking re-election in 2026", districts:["Trenton","Ewing","Hopewell","Hamilton"] },
+      { name:"Herb Conaway", title:"U.S. Representative, District 3 (D)", muni:"Federal", level:"Federal", phone:"202-225-4765", email:null, web:"https://conaway.house.gov/contact", note:"District 3: Lawrence, Hamilton, parts of Mercer · Hamilton district office: 609-438-6290", districts:["Lawrence","Hamilton"] },
+    ];
+
+    const tagMap = {
+      Trenton:"tag-trenton", Ewing:"tag-ewing", Hamilton:"tag-hamilton",
+      Lawrence:"tag-lawrence", Hopewell:"tag-hopewell", "County-wide":"tag-county",
+      State:"tag-state", Federal:"tag-federal", "NJ DEP":"tag-nj", TWW:"tag-tww", Governor:"tag-gov"
+    };
+
+    const sectionNames = {
+      TWW:"Trenton Water Works", Municipal:"Municipal officials", County:"Mercer County",
+      State:"NJ state reps", "NJ DEP":"NJ DEP", Governor:"Governor's office", Federal:"Federal reps"
+    };
+    const renderOrder = ["TWW","Municipal","County","State","NJ DEP","Governor","Federal"];
+
+    let activeMuni="all", activeLevel="all", searchTerm="";
+
+    function tagLabel(o) {
+      const map = { TWW:"TWW", Municipal:o.muni, County:"Mercer County", State:"NJ Legislature", Federal:"U.S. Congress", Governor:"Governor's Office", "NJ DEP":"NJ DEP" };
+      return map[o.level] || o.level;
+    }
+    function tagClass(o) {
+      if (o.level==="Municipal") return tagMap[o.muni] || "tag-county";
+      return tagMap[o.level] || "tag-county";
+    }
+    function hl(text, term) {
+      if (!term) return text;
+      const re = new RegExp("(" + term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ")","gi");
+      return text.replace(re, '<mark class="highlight">$1</mark>');
+    }
+    function matches(o) {
+      const levelOk = activeLevel==="all" || o.level===activeLevel;
+      const searchOk = !searchTerm || [o.name,o.title,o.muni,o.level,o.note||""].join(" ").toLowerCase().includes(searchTerm.toLowerCase());
+      if (activeMuni!=="all") {
+        if (o.districts) return o.districts.includes(activeMuni) && levelOk && searchOk;
+        if (o.level==="Municipal") return o.muni===activeMuni && levelOk && searchOk;
+        if (["TWW","Governor","NJ DEP","County"].includes(o.level)) return levelOk && searchOk;
+        return false;
+      }
+      return levelOk && searchOk;
+    }
+    function render() {
+      const filtered = officials.filter(matches);
+      const byLevel = {};
+      filtered.forEach(o => { (byLevel[o.level] = byLevel[o.level] || []).push(o); });
+      const container = document.getElementById("cards-container");
+      document.getElementById("result-count").textContent = filtered.length + " contact" + (filtered.length !== 1 ? "s" : "");
+      if (!filtered.length) { container.innerHTML = '<div class="empty">No contacts match this search.</div>'; return; }
+      const t = searchTerm;
+      let html = "";
+      renderOrder.forEach(lvl => {
+        if (!byLevel[lvl]) return;
+        html += `<div class="section-label">${sectionNames[lvl]}</div><div class="card-grid">`;
+        byLevel[lvl].forEach(o => {
+          const emailRow = o.email
+            ? `<div class="card-row"><span>&#9993;</span> <a href="mailto:${o.email}">${o.email}</a></div>`
+            : `<div class="card-row"><span>&#9993;</span> <a href="${o.web}" target="_blank">Contact via web form</a></div>`;
+          const noteRow = o.note ? `<p class="card-note">${o.note}</p>` : "";
+          html += `<div class="card">
+            <span class="tag ${tagClass(o)}">${tagLabel(o)}</span>
+            <p class="card-name">${hl(o.name, t)}</p>
+            <p class="card-title">${hl(o.title, t)}</p>
+            ${noteRow}
+            <div class="card-row"><span>&#9742;</span> <span>${o.phone}</span></div>
+            ${emailRow}
+            <div class="card-row"><span>&#127760;</span> <a href="${o.web}" target="_blank">${o.web.replace('https://','').split('/')[0]}</a></div>
+          </div>`;
+        });
+        html += "</div>";
+      });
+      container.innerHTML = html;
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const f = btn.dataset.filter, v = btn.dataset.val;
+        if (f==="muni") { activeMuni=v; document.querySelectorAll("[data-filter='muni']").forEach(b => b.classList.toggle("active", b.dataset.val===v)); }
+        else { activeLevel=v; document.querySelectorAll("[data-filter='level']").forEach(b => b.classList.toggle("active", b.dataset.val===v)); }
+        render();
+      });
+    });
+
+    document.getElementById("search-input").addEventListener("input", e => { searchTerm = e.target.value; render(); });
+
+    render();
+  </script>
+</body>
+</html>
